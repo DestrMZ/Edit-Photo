@@ -10,7 +10,7 @@ import SwiftUI
 struct ResetPasswordView: View {
     
     @ObservedObject var authViewModel: AuthViewModel
-    @Environment(\.dismiss) var dismiss  // Allows to dismiss the view
+    @Environment(\.dismiss) var dismiss
     
     var body: some View {
         VStack(spacing: 15) {

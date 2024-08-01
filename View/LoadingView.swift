@@ -5,6 +5,8 @@
 //  Created by Ivan Maslennikov on 31.07.2024.
 //
 
+
+// TODO: Loading view
 import SwiftUI
 
 struct LoadingView: View {
@@ -23,3 +25,4 @@ struct LoadingView: View {
 #Preview {
     LoadingView()
 }
+ 

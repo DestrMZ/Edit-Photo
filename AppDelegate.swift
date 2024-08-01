@@ -5,6 +5,7 @@
 //  Created by Ivan Maslennikov on 30.07.2024.
 //
 
+
 import SwiftUI
 import FirebaseCore
 import GoogleSignIn
@@ -15,11 +16,6 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         FirebaseApp.configure()
         return true
     }
-    
-//    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-//        return GIDSignIn.sharedInstance.handle(url)
-//    }
-    
 }
 
 

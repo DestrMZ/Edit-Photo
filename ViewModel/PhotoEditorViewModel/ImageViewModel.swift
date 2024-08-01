@@ -10,7 +10,7 @@ import SwiftUI
 
 class ImageViewModel: ObservableObject {
     
-    @Published var imageModel = ImageModel()
+    @Published var imageModel: ImageModel = ImageModel()
     @Published var selectedImage: UIImage?
     
     func setImage(_ image: UIImage) {

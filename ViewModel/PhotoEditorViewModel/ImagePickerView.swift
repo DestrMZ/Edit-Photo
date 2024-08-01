@@ -8,7 +8,7 @@
 
 
 import SwiftUI
-import PhotosUI
+
 
 struct ImagePickerView: UIViewControllerRepresentable {
     
@@ -53,4 +53,3 @@ struct ImagePickerView: UIViewControllerRepresentable {
         print("Updated source type: \(sourceType.rawValue)")
     }
 }
-

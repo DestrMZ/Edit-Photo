@@ -10,6 +10,7 @@ import SwiftUI
 struct ContentView: View {
     @StateObject private var authViewModel = AuthViewModel()
     @StateObject private var imageViewModel = ImageViewModel()
+    @State private var isLogg: Bool = false
     
     @State private var showImagePicker = false
     

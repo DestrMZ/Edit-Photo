@@ -7,29 +7,55 @@
 
 
 import SwiftUI
-import PhotosUI
 
 struct ImagePicker: View {
     
     @StateObject private var imageViewModel = ImageViewModel()
     @State private var showPicker: Bool = false
     @State private var type: UIImagePickerController.SourceType = .photoLibrary
+    @State private var showTextView = false
 
+    @State private var lastScale: CGFloat = 1.0
+    @State private var lastRotation: Angle = .zero
+    
     var body: some View {
-        
         NavigationStack {
             
-            
+            Spacer()
             
             VStack {
-                
                 if let image = imageViewModel.imageModel.image {
                     Image(uiImage: image)
                         .resizable()
                         .scaledToFit()
                         .scaleEffect(imageViewModel.imageModel.scale)
                         .rotationEffect(imageViewModel.imageModel.rotation)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .frame(maxWidth: .infinity, maxHeight: 400)
+                        .border(Color.gray, width: 2)
+                        .cornerRadius(10)
+                        .padding()
+                        .gesture(
+                            SimultaneousGesture(
+                                MagnificationGesture()
+                                    .onChanged { value in
+                                        let newScale = value / lastScale * imageViewModel.imageModel.scale
+                                        imageViewModel.scaleImage(newScale)
+                                        lastScale = value
+                                    }
+                                    .onEnded { _ in
+                                        lastScale = 1.0
+                                    },
+                                RotationGesture()
+                                    .onChanged { value in
+                                        let newRotation = value - lastRotation + imageViewModel.imageModel.rotation
+                                        imageViewModel.rotationImage(newRotation)
+                                        lastRotation = value
+                                    }
+                                    .onEnded { _ in
+                                        lastRotation = .zero
+                                    }
+                            )
+                        )
                 } else {
                     Text("Please upload a photo for editing")
                         .foregroundStyle(.gray)
@@ -40,75 +66,55 @@ struct ImagePicker: View {
                 
                 Spacer()
                 
-                HStack {
-                    
-                    
-                    
-                }.frame(maxWidth: .infinity, minHeight: 50)
-                    .background(.white)
-                
-                
-                HStack {
-                    Button(action: {
-                        type = .photoLibrary
-                        showPicker = true
-                        print("Setting source type to photoLibrary")
-                    }) {
-                        Text("Select Photo from gallery")
-                            .padding()
-                            .background(Color.blue)
-                            .foregroundColor(.white)
-                            .cornerRadius(8)
-                    }
-                    
-                    Button(action: {
-                        if UIImagePickerController.isSourceTypeAvailable(.camera) {
-                            type = .camera
-                            showPicker = true
-                            print("Setting source type to camera")
-                        } else {
-                            // Handle the case where the camera is not available
-                            print("Camera is not available.")
-                        }
-                    }) {
-                        Text("Take Photo")
-                            .padding()
-                            .background(Color.green)
-                            .foregroundColor(.white)
-                            .cornerRadius(8)
-                    }
-                }
-                .padding()
-                
-                HStack {
-                    Button(action: {
-                        imageViewModel.saveImageToPhotoLibrary()
-                    }) {
-                        Text("Save Photo")
-                            .padding()
-                            .background(Color.orange)
-                            .foregroundColor(.white)
-                            .cornerRadius(8)
-                    }
-                    
-                    Button(action: {
-                        imageViewModel.resetImage()
-                    }) {
-                        Text("Reset")
-                            .padding()
-                            .background(Color.red)
-                            .foregroundColor(.white)
-                            .cornerRadius(8)
-                    }
-                }
-                .padding()
-                
             }
             .sheet(isPresented: $showPicker) {
-                ImagePickerView(sourceType: $type, image: $imageViewModel.imageModel.image)
+                if type == .photoLibrary {
+                    ImagePickerView(sourceType: $type, image: $imageViewModel.imageModel.image)
+                } else {
+                    ImagePickerView(sourceType: $type, image: $imageViewModel.imageModel.image)
+                }
+            }
+            .sheet(isPresented: $showTextView) {
+                TextOverlayView(image: $imageViewModel.imageModel.image)
+            }
+            .navigationBarHidden(true)
+            .toolbar {
+                ToolbarItemGroup(placement: .bottomBar) {
+                    HStack {
+                        Button(action: {
+                            type = .photoLibrary
+                            showPicker = true
+                            print("Setting source type to photoLibrary")
+                        }) {
+                            Image(systemName: "plus")
+                        }
+                        
+                        Spacer()
+                        
+                        Button(action: {
+                            showTextView = true
+                        }) {
+                            Image(systemName: "plus.message.fill")
+                        }
+                        
+                        Spacer()
+                        
+                        Button(action: {
+                            if UIImagePickerController.isSourceTypeAvailable(.camera) {
+                                type = .camera
+                                showPicker = true
+                                print("Setting source type to camera")
+                            } else {
+                                print("Camera is not available.")
+                            }
+                        }) {
+                            Image(systemName: "camera")
+                        }
+                    }
+                    .padding()
+                }
             }
         }
-        .navigationBarHidden(true)
     }
 }
 

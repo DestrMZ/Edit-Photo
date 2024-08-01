@@ -4,7 +4,6 @@
 //
 //  Created by Ivan Maslennikov on 30.07.2024.
 //
-// Регистрация нового пользователя
 
 
 import SwiftUI
