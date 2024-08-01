@@ -27,4 +27,7 @@ EditPhoto — это мобильное приложение для редакт
   - Масштабирование изображения с помощью жестов Pinch-to-Zoom.
   - Поворот изображения с помощью жестов Rotation.
 
+## Примечание
+Для запуска добавьте свои GoogleService-Info и Info файлы
+
 ![image](https://github.com/user-attachments/assets/28db68c0-366f-4d52-9125-0472df976e1b)
